@@ -3,3 +3,32 @@
 <p>Bidding Deadline: <%= @product.bidding %></p>
 <br>
 <%= link_to 'Return to products\'s page', products_path %>
+
+<h4>Bid on this product:</h4>
+
+<% if user_signed_in? %>
+	<%= form_for [@product, @bid] do |f| %>
+		<%= f.label :value %>
+		<%# :step => 'any' allows both integers and decimals to be valid %>
+		<%# :min establishes the minimum value %>
+		<%= f.number_field :value, :step => 'any', :min => 1 %>
+		<%= f.button %>
+	<% end %>
+<% else %>
+	<h3>Please <%= link_to 'sign in', new_user_session_path %> to bid on this product</h3>
+<% end %>
+
+<h4>Current Bids:</h4>
+<% if @bids %>
+	<ul>
+		<% @bids.each do |bid| %>
+			<li>
+				$ <%= bid.value %><br>
+				on <%= bid.created_at %><br>
+				by: <%= bid.user.email %>
+			</li>
+		<% end %>
+	</ul>
+<% else %>
+	<h2>No Bids found for this product</h2>
+<% end %>
