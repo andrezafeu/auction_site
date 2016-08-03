@@ -20,4 +20,10 @@ class ProductsController < ApplicationController
 			render "new"
 		end
 	end
+	def show
+		@product = Product.find_by(id: params[:id])	
+		unless @product
+			render "no_products_found"
+		end
+	end
 end
