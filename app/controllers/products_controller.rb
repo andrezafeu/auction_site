@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
 	before_action :authenticate_user!, only: [:new]
 	def index
+		@products = Product.order(created_at: :desc).limit(10)
 	end
 	def new
 		@product = Product.new
@@ -11,7 +12,7 @@ class ProductsController < ApplicationController
 			:description => params[:product][:description],
 			:bidding => params[:product][:bidding]
 			)
-		@product.id = current_user.id
+		@product.user_id = current_user.id
 		if @product.save
 			flash[:notice] = "You product was saved."
 			redirect_to products_path
